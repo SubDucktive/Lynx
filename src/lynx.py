@@ -4,6 +4,7 @@ import json
 from lexer import Lexer
 import error
 from parser import Parser
+from interpreter import evaluate
 
 def report(error):
     print(error)
@@ -29,11 +30,14 @@ def repl():
         try:
             tokens = Lexer(userin).tokenize()
             ast = Parser(tokens).parse()
+            
+            result = evaluate(ast)
+            if hasattr(result, "value"):
+                print(result.value)
+
         except error.LynxError as err:
             print(err)
             continue
-
-        print(json.dumps(ast.dict(), indent=3))
 
 def main():
     print(sys.argv)
