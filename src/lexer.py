@@ -1,29 +1,5 @@
 import error
-
-class TokenType:
-    leftParen = "leftParen"
-    rightParen = "rightParen"
-    plus = "plus"
-    minus = "minus"
-    mult = "mult"
-    divide = "divide"
-    number = "number"
-    EOF = "EOF"
-
-class Token:
-    def __init__(self, type, line, col, value=None):
-        self.type = type
-        self.value = value
-
-        self.line = line
-        self.col = col
-
-
-    def __repr__(self):
-        if self.value:
-            return f"Token({self.type}, {self.value})"
-        else:
-            return f"Token({self.type})"
+from Token import TokenType, Token
 
 class Lexer:
     def __init__(self, src):
@@ -56,30 +32,31 @@ class Lexer:
         return self.idx >= len(self.src)
     
     def scanToken(self):
+        line, col = self.line, self.col
         if self.peek() == "(":
             self.eat()
-            return Token(TokenType.leftParen, self.line, self.col)
+            return Token(TokenType.leftParen, line, col)
         elif self.peek() == ")":
             self.eat()
-            return Token(TokenType.rightParen, self.line, self.col)
+            return Token(TokenType.rightParen, line, col)
         elif self.peek() == "+":
             self.eat()
-            return Token(TokenType.plus, self.line, self.col)
+            return Token(TokenType.plus, line, col)
         elif self.peek() == "-":
             self.eat()
-            return Token(TokenType.minus, self.line, self.col)
+            return Token(TokenType.minus, line, col)
         elif self.peek() == "*":
             self.eat()
-            return Token(TokenType.mult, self.line, self.col)
+            return Token(TokenType.mult, line, col)
         elif self.peek() == "/":
             self.eat()
-            return Token(TokenType.divide, self.line, self.col)
+            return Token(TokenType.divide, line, col)
         elif self.peek().isnumeric():
             number = self.eat()
             while not self.atEnd() and self.peek().isnumeric():
                 number += self.eat()
 
-            return Token(TokenType.number, self.line, self.col,int(number))
+            return Token(TokenType.number, line, col,int(number))
         elif self.peek() in "\t ":
             self.eat()
         else:
