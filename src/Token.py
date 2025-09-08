@@ -8,6 +8,13 @@ class TokenType:
     mult = "mult"
     divide = "divide"
     number = "number"
+    identifier = "identifier"
+    equals = "equals"
+    semi = "semi"
+
+    # keywords
+    _var = "var"
+
     EOF = "EOF"
 
 class Token:
@@ -19,6 +26,6 @@ class Token:
 
     def __repr__(self):
         if self.value:
-            return f"Token({self.type}, {self.value})"
+            return f"Token({self.type}, '{self.value}')"
         else:
             return f"Token({self.type})"

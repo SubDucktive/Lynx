@@ -14,6 +14,23 @@ class ProgramStatement:
             "self.pos": self.pos.dict()
         }
 
+class VariableDeclarationStatement:
+    def __init__(self, id, init, line, col):
+        self.type = "VariableDeclarationStatement"
+
+        self.id = id
+        self.init = init
+
+        self.pos = Position(line, col)
+
+    def dict(self):
+        return {
+            "type": self.type,
+            "id": self.id.dict(),
+            "init": self.init.dict(),
+            "pos": self.pos.dict()
+        }
+
 class NumericLiteral:
     def __init__(self, value, line, col):
         self.type = "NumericLiteral"
@@ -26,6 +43,21 @@ class NumericLiteral:
         return {
             "type": self.type,
             "value": self.value,
+            "pos": self.pos.dict()
+        }
+
+class Identifier:
+    def __init__(self, name, line, col):
+        self.type = "Identifier"
+
+        self.name = name
+
+        self.pos = Position(line, col)
+        
+    def dict(self):
+        return {
+            "type": self.type,
+            "name": self.value,
             "pos": self.pos.dict()
         }
 

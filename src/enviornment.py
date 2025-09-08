@@ -11,6 +11,15 @@ class Enviornment:
         self.variables = []
         self.parent = parent
 
+    def defineBuiltinVar(self, name, value):
+        self.variables.append(Variable(name, value))
+
+    def defineVariable(self, name, value):
+        if self.varExists(name):
+            raise LynxError(f"Cannot declare variable '{name.value}, it already exists in this scope'", name.pos.line, name.pos.col)
+        
+        self.variables.append(Variable(name.value, value))
+
     def varExists(self, name):
         for variable in self.variables:
             if variable.name == name.value:
@@ -24,12 +33,12 @@ class Enviornment:
             return self
         
         if self.parent == None:
-            raise LynxError(f"Couldn't resolve variable: '{name.value}'")
+            raise LynxError(f"Couldn't resolve variable: '{name.value}'", name.pos.line, name.pos.col)
         
         return self.parent.resolve(name)
     
     def lookup(self, name):
-        env = self.resolve(name.value)
+        env = self.resolve(name)
 
         index = [index for index, variable in enumerate(env.variables) if variable.name == name.value][0]
         

@@ -1,7 +1,9 @@
 from nodes import (
     ProgramStatement,
     BinaryExpression,
-    NumericLiteral
+    NumericLiteral,
+    Identifier,
+    VariableDeclarationStatement
 )
 
 from error import LynxError
@@ -12,6 +14,8 @@ class Parser:
         self.tokens = tokens
 
         self.idx = 0
+
+        self.semiafterexpr = True
 
     def peek(self):
         return self.tokens[self.idx]
@@ -24,7 +28,10 @@ class Parser:
     def expect(self, type, message):
         tok = self.eat()
         if tok.type != type:
+            print(tok.pos.line)
             raise LynxError(message, tok.pos.line, tok.pos.col)
+        
+        return tok
 
     def atEnd(self):
         return self.peek().type == TokenType.EOF
@@ -37,8 +44,28 @@ class Parser:
 
         return program
 
+    def parseVariableDeclaration(self):
+        tok = self.expect(TokenType._var, "Expected var keyword at beginning of variable declaration.")
+
+        id = self.expect(TokenType.identifier, "Expected identifier in variable declaration.")
+        id = Identifier(id, id.pos.line, id.pos.col)
+
+        self.expect(TokenType.equals, "Expected equals sign in variable declaration.")
+
+        init = self.parseExpression()
+
+        self.expect(TokenType.semi, "Expected semicolon at end of variable declaration statement.")
+
+        return VariableDeclarationStatement(id, init, tok.pos.line, tok.pos.col)
+    
     def parseStatement(self):
-        return self.parseExpression()
+        if self.peek().type == TokenType._var:
+            return self.parseVariableDeclaration()
+        else:
+            expr = self.parseExpression()
+            if self.semiafterexpr:
+                self.expect(TokenType.semi, "Expected semicolon after standalone expression.")
+            return expr
     
     def parseExpression(self):
         return self.parseAdditive()
@@ -68,6 +95,10 @@ class Parser:
         if tok.type == TokenType.number:
             self.eat()
             return NumericLiteral(tok.value, tok.pos.line, tok.pos.col)
+        elif tok.type == TokenType.identifier:
+            self.eat()
+            # token used for position in enviornment
+            return Identifier(tok, tok.pos.line, tok.pos.col)
         elif tok.type == TokenType.leftParen:
             self.eat()
             value = self.parseExpression()

@@ -51,12 +51,28 @@ class Lexer:
         elif self.peek() == "/":
             self.eat()
             return Token(TokenType.divide, line, col)
+        elif self.peek() == "=":
+            self.eat()
+            return Token(TokenType.equals, line, col)
+        elif self.peek() == ";":
+            self.eat()
+            return Token(TokenType.semi, line, col)
         elif self.peek().isnumeric():
             number = self.eat()
             while not self.atEnd() and self.peek().isnumeric():
                 number += self.eat()
 
-            return Token(TokenType.number, line, col,int(number))
+            return Token(TokenType.number, line, col, int(number))
+        elif self.peek().isalpha() or self.peek() == "_":
+            symbol = self.eat()
+
+            while not self.atEnd() and (self.peek().isalnum() or self.peek() == "_"):
+                symbol += self.eat()
+
+            if symbol == "var":
+                return Token(TokenType._var, line, col, symbol)
+
+            return Token(TokenType.identifier, line, col, symbol)
         elif self.peek() in "\t ":
             self.eat()
         else:

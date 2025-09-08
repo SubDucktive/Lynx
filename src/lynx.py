@@ -5,6 +5,9 @@ from lexer import Lexer
 import error
 from parser import Parser
 from interpreter import evaluate
+from enviornment import Enviornment
+from Token import Token, TokenType
+import runtimevalues
 
 def report(error):
     print(error)
@@ -24,14 +27,24 @@ def runFile(filename):
 
 def repl():
     userin = ""
+
+    # create global env
+    env = Enviornment()
+
+    # test variable
+    env.defineBuiltinVar("a", runtimevalues.Number(5))
+
     while userin != ".exit":
         userin = input("> ")
 
         try:
             tokens = Lexer(userin).tokenize()
-            ast = Parser(tokens).parse()
-            
-            result = evaluate(ast)
+
+            parser = Parser(tokens)
+            parser.semiafterexpr = False
+            ast = parser.parse()
+
+            result = evaluate(ast, env)
             if hasattr(result, "value"):
                 print(result.value)
 
