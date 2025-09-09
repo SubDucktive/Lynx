@@ -45,3 +45,7 @@ def evaluate(node, env):
         env.assignVar(node.left.name, right)
 
         return right
+    elif node.type == "PrintStatement":
+        argument = evaluate(node.argument, env)
+
+        print(argument.value)

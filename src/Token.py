@@ -14,6 +14,7 @@ class TokenType:
 
     # keywords
     _var = "var"
+    _print = "print"
 
     EOF = "EOF"
 

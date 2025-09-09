@@ -30,6 +30,21 @@ class VariableDeclarationStatement:
             "init": self.init.dict(),
             "pos": self.pos.dict()
         }
+    
+class PrintStatement:
+    def __init__(self, argument, line, col):
+        self.type = "PrintStatement"
+
+        self.argument = argument
+
+        self.pos = Position(line, col)
+
+    def dict(self):
+        return {
+            "type": self.type,
+            "argument": self.argument.dict(),
+            "pos": self.pos.dict()
+        }
 
 class NumericLiteral:
     def __init__(self, value, line, col):

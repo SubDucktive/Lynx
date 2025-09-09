@@ -4,7 +4,8 @@ from nodes import (
     NumericLiteral,
     Identifier,
     VariableDeclarationStatement,
-    AssignmentExpression
+    AssignmentExpression,
+    PrintStatement
 )
 
 from error import LynxError
@@ -59,9 +60,20 @@ class Parser:
 
         return VariableDeclarationStatement(id, init, tok.pos.line, tok.pos.col)
     
+    def parsePrintStatement(self):
+        tok = self.eat()
+
+        argument = self.parseExpression()
+
+        self.expect(TokenType.semi, "Expected semicolon at end of print statement")
+
+        return PrintStatement(argument, tok.pos.line, tok.pos.col)
+    
     def parseStatement(self):
         if self.peek().type == TokenType._var:
             return self.parseVariableDeclaration()
+        elif self.peek().type == TokenType._print:
+            return self.parsePrintStatement()
         else:
             expr = self.parseExpression()
             if self.semiafterexpr:

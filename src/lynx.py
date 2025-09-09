@@ -20,19 +20,31 @@ def runFile(filename):
     except FileNotFoundError:
         report(error.LynxError("Specified file path not found"))
 
-    tokens = Lexer(contents).tokenize()
-    ast = Parser(tokens).parse()
+     # create global env
+    env = Enviornment()
 
-    print(json.dumps(ast.dict(), indent=3))
+    try:
+            tokens = Lexer(contents).tokenize()
+
+            parser = Parser(tokens)
+            parser.semiafterexpr = False
+            ast = parser.parse()
+
+            #print(json.dumps(ast.dict(), indent=2))
+
+            result = evaluate(ast, env)
+            if hasattr(result, "value"):
+                print(result.value)
+
+    except error.LynxError as err:
+        print(err)
+        sys.exit(1)
 
 def repl():
     userin = ""
 
     # create global env
     env = Enviornment()
-
-    # test variable
-    env.defineBuiltinVar("a", runtimevalues.Number(5))
 
     while userin != ".exit":
         userin = input("> ")
@@ -55,7 +67,6 @@ def repl():
             continue
 
 def main():
-    print(sys.argv)
     if len(sys.argv) > 2:
         report(error.LynxError("Incorrect Usage, correct usage: lynx [script]"))
     elif len(sys.argv) == 2:
