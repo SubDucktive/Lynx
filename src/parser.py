@@ -3,7 +3,8 @@ from nodes import (
     BinaryExpression,
     NumericLiteral,
     Identifier,
-    VariableDeclarationStatement
+    VariableDeclarationStatement,
+    AssignmentExpression
 )
 
 from error import LynxError
@@ -68,7 +69,17 @@ class Parser:
             return expr
     
     def parseExpression(self):
-        return self.parseAdditive()
+        return self.parseAssignment()
+    
+    def parseAssignment(self):
+        left = self.parseAdditive()
+
+        if self.peek().type == TokenType.equals:
+            self.eat()
+            right = self.parseAssignment()
+            return AssignmentExpression(left, right, left.pos.line, left.pos.col)
+        
+        return left
 
     def parseAdditive(self):
         left = self.parseMultiplicative()

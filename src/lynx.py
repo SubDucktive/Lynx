@@ -44,6 +44,8 @@ def repl():
             parser.semiafterexpr = False
             ast = parser.parse()
 
+            #print(json.dumps(ast.dict(), indent=2))
+
             result = evaluate(ast, env)
             if hasattr(result, "value"):
                 print(result.value)

@@ -25,6 +25,14 @@ class Enviornment:
             if variable.name == name.value:
                 return True
         return False
+    
+    def assignVar(self, name, value):
+        env = self.resolve(name)
+
+        index = [index for index, variable in enumerate(env.variables) if variable.name == name.value][0]
+
+        env.variables[index].value = value
+
 
     def resolve(self, name):
         # name argument is a token passed in

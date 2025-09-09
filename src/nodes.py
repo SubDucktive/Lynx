@@ -57,7 +57,7 @@ class Identifier:
     def dict(self):
         return {
             "type": self.type,
-            "name": self.value,
+            "name": self.name,
             "pos": self.pos.dict()
         }
 
@@ -76,6 +76,23 @@ class BinaryExpression:
             "type": self.type,
             "left": self.left.dict(),
             "op": str(self.op),
+            "right": self.right.dict(),
+            "pos": self.pos.dict()
+        }
+    
+class AssignmentExpression():
+    def __init__(self, left, right, line, col):
+        self.type = "AssignmentExpression"
+
+        self.left = left
+        self.right = right
+
+        self.pos = Position(line, col)
+
+    def dict(self):
+        return {
+            "type": self.type,
+            "left": self.left.dict(),
             "right": self.right.dict(),
             "pos": self.pos.dict()
         }

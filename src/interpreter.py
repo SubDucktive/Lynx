@@ -36,3 +36,12 @@ def evaluate(node, env):
     elif node.type == "VariableDeclarationStatement":
         init = evaluate(node.init, env)
         env.defineVariable(node.id.name, init)
+    elif node.type == "AssignmentExpression":
+        if node.left.type != "Identifier":
+            raise error.LynxError(f"Cannot assign to type '{node.left.type}, left hand side must be an Identifier'", node.pos.line, node.pos.col)
+        
+        right = evaluate(node.right, env)
+
+        env.assignVar(node.left.name, right)
+
+        return right
