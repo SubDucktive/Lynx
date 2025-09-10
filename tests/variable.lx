@@ -1,0 +1,17 @@
+var x = 2;
+var y = 3;
+
+print x; // 2
+print y; // 3
+
+var z = x + y;
+
+print z; // 5
+
+x = 3;
+
+print x; // 3
+
+x = x + 1; // x = 4
+
+print x; // 4

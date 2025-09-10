@@ -27,14 +27,12 @@ def runFile(filename):
             tokens = Lexer(contents).tokenize()
 
             parser = Parser(tokens)
-            parser.semiafterexpr = False
+            parser.semiafterexpr = True
             ast = parser.parse()
 
             #print(json.dumps(ast.dict(), indent=2))
 
-            result = evaluate(ast, env)
-            if hasattr(result, "value"):
-                print(result.value)
+            evaluate(ast, env)
 
     except error.LynxError as err:
         print(err)

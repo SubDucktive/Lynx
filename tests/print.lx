@@ -1,1 +1,4 @@
+// this is a print statement and might not work in later versions of the language because the
+// plan is to have printing managed by a function and not its own statement, however i have added
+// this in early versions of the language for debugging before i have functions.
 print 5 + 2;

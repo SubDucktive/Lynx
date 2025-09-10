@@ -50,6 +50,14 @@ class Lexer:
             return Token(TokenType.mult, line, col)
         elif self.peek() == "/":
             self.eat()
+
+            if self.peek() == "/":
+                # comment
+                while not self.atEnd() and self.peek() != "\n":
+                    self.eat()
+
+                return
+
             return Token(TokenType.divide, line, col)
         elif self.peek() == "=":
             self.eat()
@@ -76,6 +84,8 @@ class Lexer:
 
             return Token(TokenType.identifier, line, col, symbol)
         elif self.peek() in "\t ":
+            self.eat()
+        elif self.peek() == "\n":
             self.eat()
         else:
             raise error.LynxError(f"Unrecognized character in source: '{self.peek()}'", self.line, self.col)

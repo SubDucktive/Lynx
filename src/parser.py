@@ -30,7 +30,6 @@ class Parser:
     def expect(self, type, message):
         tok = self.eat()
         if tok.type != type:
-            print(tok.pos.line)
             raise LynxError(message, tok.pos.line, tok.pos.col)
         
         return tok

@@ -1,0 +1,4 @@
+// this is a comment
+print 0; // comment after a line
+
+// print 1; // this is commented out and wont run
