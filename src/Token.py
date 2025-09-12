@@ -15,6 +15,7 @@ class TokenType:
     # keywords
     _var = "var"
     _print = "print"
+    _const = "const"
 
     EOF = "EOF"
 

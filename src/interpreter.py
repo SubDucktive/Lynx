@@ -34,8 +34,12 @@ def evaluate(node, env):
     elif node.type == "Identifier":
         return env.lookup(node.name)
     elif node.type == "VariableDeclarationStatement":
-        init = evaluate(node.init, env)
-        env.defineVariable(node.id.name, init)
+        if node.init == None:
+            init = runtimevalues.Null()
+        else:
+            init = evaluate(node.init, env)
+
+        env.defineVariable(node.id.name, init, node.kind)
     elif node.type == "AssignmentExpression":
         if node.left.type != "Identifier":
             raise error.LynxError(f"Cannot assign to type '{node.left.type}, left hand side must be an Identifier'", node.pos.line, node.pos.col)
@@ -49,3 +53,5 @@ def evaluate(node, env):
         argument = evaluate(node.argument, env)
 
         print(argument.value)
+    else:
+        raise error.LynxError(f"Unknown ast node: {node.type}", node.pos.line, node.pos.col)

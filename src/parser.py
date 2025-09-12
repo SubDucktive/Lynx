@@ -44,20 +44,41 @@ class Parser:
             program.statements.append(self.parseStatement())
 
         return program
-
-    def parseVariableDeclaration(self):
-        tok = self.expect(TokenType._var, "Expected var keyword at beginning of variable declaration.")
+    
+    def parseConstVarDeclaration(self):
+        tok = self.eat()
 
         id = self.expect(TokenType.identifier, "Expected identifier in variable declaration.")
         id = Identifier(id, id.pos.line, id.pos.col)
 
-        self.expect(TokenType.equals, "Expected equals sign in variable declaration.")
+        self.expect(TokenType.equals, "Expected equals sign in constant variable declaration.")
 
         init = self.parseExpression()
 
         self.expect(TokenType.semi, "Expected semicolon at end of variable declaration statement.")
 
-        return VariableDeclarationStatement(id, init, tok.pos.line, tok.pos.col)
+        return VariableDeclarationStatement(id, init, "const", tok.pos.line, tok.pos.col)
+
+
+    def parseVariableDeclaration(self):
+        if self.peek().type == TokenType._const:
+            return self.parseConstVarDeclaration()
+        tok = self.expect(TokenType._var, "Expected var keyword at beginning of variable declaration.")
+
+        id = self.expect(TokenType.identifier, "Expected identifier in variable declaration.")
+        id = Identifier(id, id.pos.line, id.pos.col)
+
+        if self.peek().type == TokenType.semi: # uninitialized variable
+            self.eat()
+            return VariableDeclarationStatement(id, None, "var", tok.pos.line, tok.pos.col)
+        
+        self.expect(TokenType.equals, "Expected equals sign or semicolon after identifier in variable declaration.")
+
+        init = self.parseExpression()
+
+        self.expect(TokenType.semi, "Expected semicolon at end of variable declaration statement.")
+
+        return VariableDeclarationStatement(id, init, "var", tok.pos.line, tok.pos.col)
     
     def parsePrintStatement(self):
         tok = self.eat()
@@ -69,7 +90,7 @@ class Parser:
         return PrintStatement(argument, tok.pos.line, tok.pos.col)
     
     def parseStatement(self):
-        if self.peek().type == TokenType._var:
+        if self.peek().type == TokenType._var or self.peek().type == TokenType._const:
             return self.parseVariableDeclaration()
         elif self.peek().type == TokenType._print:
             return self.parsePrintStatement()

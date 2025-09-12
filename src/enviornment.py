@@ -1,9 +1,11 @@
 from error import LynxError
 
 class Variable:
-    def __init__(self, name, value):
+    def __init__(self, name, value, kind="var"):
         self.name = name
         self.value = value
+
+        self.kind = kind
 
 
 class Enviornment:
@@ -12,13 +14,13 @@ class Enviornment:
         self.parent = parent
 
     def defineBuiltinVar(self, name, value):
-        self.variables.append(Variable(name, value))
+        self.variables.append(Variable(name, value, "const"))
 
-    def defineVariable(self, name, value):
+    def defineVariable(self, name, value, kind):
         if self.varExists(name):
             raise LynxError(f"Cannot declare variable '{name.value}, it already exists in this scope'", name.pos.line, name.pos.col)
         
-        self.variables.append(Variable(name.value, value))
+        self.variables.append(Variable(name.value, value, kind))
 
     def varExists(self, name):
         for variable in self.variables:
@@ -30,6 +32,9 @@ class Enviornment:
         env = self.resolve(name)
 
         index = [index for index, variable in enumerate(env.variables) if variable.name == name.value][0]
+
+        if env.variables[index].kind == "const":
+            raise LynxError(f"Cannot assign a value to constant variable '{name.value}'", name.pos.line, name.pos.col)
 
         env.variables[index].value = value
 

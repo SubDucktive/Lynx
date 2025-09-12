@@ -22,6 +22,7 @@ def runFile(filename):
 
      # create global env
     env = Enviornment()
+    env.defineBuiltinVar("null", runtimevalues.Null())
 
     try:
             tokens = Lexer(contents).tokenize()
@@ -31,6 +32,7 @@ def runFile(filename):
             ast = parser.parse()
 
             #print(json.dumps(ast.dict(), indent=2))
+
 
             evaluate(ast, env)
 

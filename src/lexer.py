@@ -81,6 +81,8 @@ class Lexer:
                 return Token(TokenType._var, line, col, symbol)
             elif symbol == "print":
                 return Token(TokenType._print, line, col, symbol)
+            elif symbol == "const":
+                return Token(TokenType._const, line, col, symbol)
 
             return Token(TokenType.identifier, line, col, symbol)
         elif self.peek() in "\t ":

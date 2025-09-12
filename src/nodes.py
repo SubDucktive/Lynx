@@ -15,11 +15,13 @@ class ProgramStatement:
         }
 
 class VariableDeclarationStatement:
-    def __init__(self, id, init, line, col):
+    def __init__(self, id, init, kind, line, col):
         self.type = "VariableDeclarationStatement"
 
         self.id = id
         self.init = init
+
+        self.kind = kind
 
         self.pos = Position(line, col)
 
@@ -28,6 +30,7 @@ class VariableDeclarationStatement:
             "type": self.type,
             "id": self.id.dict(),
             "init": self.init.dict(),
+            "kind": self.kind,
             "pos": self.pos.dict()
         }
     
