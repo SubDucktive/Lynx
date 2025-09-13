@@ -16,6 +16,7 @@ class TokenType:
     _var = "var"
     _print = "print"
     _const = "const"
+    _null = "null"
 
     EOF = "EOF"
 

@@ -63,6 +63,18 @@ class NumericLiteral:
             "value": self.value,
             "pos": self.pos.dict()
         }
+    
+class NullLiteral:
+    def __init__(self, line, col):
+        self.type = "NullLiteral"
+
+        self.pos = Position(line, col)
+
+    def dict(self):
+        return {
+            "type": self.type,
+            "pos": self.pos.dict()
+        }
 
 class Identifier:
     def __init__(self, name, line, col):

@@ -12,6 +12,8 @@ def evaluate(node, env):
         return lastEvaluated
     elif node.type == "NumericLiteral":
         return runtimevalues.Number(node.value)
+    elif node.type == "NullLiteral":
+        return runtimevalues.Null()
     elif node.type == "BinaryExpression":
         lhs = evaluate(node.left, env)
         rhs = evaluate(node.right, env)
@@ -42,7 +44,7 @@ def evaluate(node, env):
         env.defineVariable(node.id.name, init, node.kind)
     elif node.type == "AssignmentExpression":
         if node.left.type != "Identifier":
-            raise error.LynxError(f"Cannot assign to type '{node.left.type}, left hand side must be an Identifier'", node.pos.line, node.pos.col)
+            raise error.LynxError(f"Cannot assign to type '{node.left.type}', left hand side must be an Identifier", node.pos.line, node.pos.col)
         
         right = evaluate(node.right, env)
 

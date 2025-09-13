@@ -1,4 +1,5 @@
 from error import LynxError
+import runtimevalues
 
 class Variable:
     def __init__(self, name, value, kind="var"):
@@ -6,6 +7,11 @@ class Variable:
         self.value = value
 
         self.kind = kind
+
+def createGlobalEnv():
+    env = Enviornment()
+
+    return env
 
 
 class Enviornment:

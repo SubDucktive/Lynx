@@ -5,7 +5,7 @@ from lexer import Lexer
 import error
 from parser import Parser
 from interpreter import evaluate
-from enviornment import Enviornment
+import enviornment
 from Token import Token, TokenType
 import runtimevalues
 
@@ -20,9 +20,7 @@ def runFile(filename):
     except FileNotFoundError:
         report(error.LynxError("Specified file path not found"))
 
-     # create global env
-    env = Enviornment()
-    env.defineBuiltinVar("null", runtimevalues.Null())
+    env = enviornment.createGlobalEnv()
 
     try:
             tokens = Lexer(contents).tokenize()
@@ -43,8 +41,7 @@ def runFile(filename):
 def repl():
     userin = ""
 
-    # create global env
-    env = Enviornment()
+    env = enviornment.createGlobalEnv()
 
     while userin != ".exit":
         userin = input("> ")

@@ -5,7 +5,8 @@ from nodes import (
     Identifier,
     VariableDeclarationStatement,
     AssignmentExpression,
-    PrintStatement
+    PrintStatement,
+    NullLiteral
 )
 
 from error import LynxError
@@ -98,6 +99,10 @@ class Parser:
             expr = self.parseExpression()
             if self.semiafterexpr:
                 self.expect(TokenType.semi, "Expected semicolon after standalone expression.")
+
+            if self.peek().type == TokenType.semi:
+                self.eat()
+            
             return expr
     
     def parseExpression(self):
@@ -138,6 +143,9 @@ class Parser:
         if tok.type == TokenType.number:
             self.eat()
             return NumericLiteral(tok.value, tok.pos.line, tok.pos.col)
+        elif tok.type == TokenType._null:
+            self.eat()
+            return NullLiteral(tok.pos.line, tok.pos.col)
         elif tok.type == TokenType.identifier:
             self.eat()
             # token used for position in enviornment
