@@ -4,7 +4,7 @@ import json
 from lexer import Lexer
 import error
 from parser import Parser
-from interpreter import evaluate
+from interpreter import evaluate, stringify
 import enviornment
 from Token import Token, TokenType
 import runtimevalues
@@ -56,8 +56,8 @@ def repl():
             #print(json.dumps(ast.dict(), indent=2))
 
             result = evaluate(ast, env)
-            if hasattr(result, "value"):
-                print(result.value)
+            
+            print(stringify(result), end="" if not result else "\n")
 
         except error.LynxError as err:
             print(err)

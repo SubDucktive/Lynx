@@ -2,6 +2,13 @@ import runtimevalues
 import error
 from Token import TokenType
 
+# will be very useful for later
+def stringify(value):
+    if value is not None:
+        if value.type in ["NumberValue", "NullValue"]:
+            return value.value
+    return ""
+
 def evaluate(node, env):
     if node.type == "ProgramStatement":
         lastEvaluated = None
@@ -54,6 +61,6 @@ def evaluate(node, env):
     elif node.type == "PrintStatement":
         argument = evaluate(node.argument, env)
 
-        print(argument.value)
+        print(stringify(argument))
     else:
         raise error.LynxError(f"Unknown ast node: {node.type}", node.pos.line, node.pos.col)
