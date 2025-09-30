@@ -12,6 +12,15 @@ class TokenType:
     equals = "equals"
     semi = "semi"
 
+    logand = "logand"
+    logor  = "logor"
+
+    bitand = "bitand"
+    bitor  = "bitor"
+    bitxor = "bitxor"
+
+    leftBrace, rightBrace = "leftBrace", "rightBrace"
+
     # keywords
     _var = "var"
     _print = "print"

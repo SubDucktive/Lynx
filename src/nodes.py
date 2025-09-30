@@ -48,6 +48,21 @@ class PrintStatement:
             "argument": self.argument.dict(),
             "pos": self.pos.dict()
         }
+    
+class BlockStatement:
+    def __init__(self, body, line, col):
+        self.type = "BlockStatement"
+
+        self.body = body
+
+        self.pos = Position(line, col)
+
+    def dict(self):
+        return {
+            "type": self.type,
+            "body": [stmt.dict() for stmt in self.body],
+            "pos": self.pos.dict()
+        }
 
 class NumericLiteral:
     def __init__(self, value, line, col):

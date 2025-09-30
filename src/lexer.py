@@ -51,7 +51,7 @@ class Lexer:
         elif self.peek() == "/":
             self.eat()
 
-            if self.peek() == "/":
+            if not self.atEnd() and self.peek() == "/":
                 # comment
                 while not self.atEnd() and self.peek() != "\n":
                     self.eat()
@@ -65,6 +65,28 @@ class Lexer:
         elif self.peek() == ";":
             self.eat()
             return Token(TokenType.semi, line, col)
+        elif self.peek() == "&":
+            self.eat()
+
+            if not self.atEnd() and self.peek() == "&":
+                self.eat()
+                return Token(TokenType.logand, line, col)
+            
+            return Token(TokenType.bitand, line, col)
+        elif self.peek() == "|":
+            self.eat()
+
+            if not self.atEnd() and self.peek() == "|":
+                self.eat()
+                return Token(TokenType.logor, line, col)
+            
+            return Token(TokenType.bitor, line, col)
+        elif self.peek() == "{":
+            self.eat()
+            return Token(TokenType.leftBrace, line, col)
+        elif self.peek() == "}":
+            self.eat()
+            return Token(TokenType.rightBrace, line, col)
         elif self.peek().isnumeric():
             number = self.eat()
             while not self.atEnd() and self.peek().isnumeric():

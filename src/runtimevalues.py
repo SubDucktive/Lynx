@@ -3,6 +3,11 @@ class Number:
         self.type = "NumberValue"
         self.value = value
 
+class Boolean:
+    def __init__(self, value):
+        self.type = "BooleanValue"
+        self.value = value
+
 class Null:
     def __init__(self):
         self.type = "NullValue"

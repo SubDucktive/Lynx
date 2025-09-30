@@ -6,7 +6,8 @@ from nodes import (
     VariableDeclarationStatement,
     AssignmentExpression,
     PrintStatement,
-    NullLiteral
+    NullLiteral,
+    BlockStatement
 )
 
 from error import LynxError
@@ -90,11 +91,25 @@ class Parser:
 
         return PrintStatement(argument, tok.pos.line, tok.pos.col)
     
+    def parseBlockStatement(self):
+        tok = self.expect(TokenType.leftBrace, "Expected left brace at beginning of block statement")
+
+        body = []
+
+        while self.peek().type != TokenType.rightBrace:
+            body.append(self.parseStatement())
+
+        self.eat()
+
+        return BlockStatement(body, tok.pos.line, tok.pos.col)
+    
     def parseStatement(self):
         if self.peek().type == TokenType._var or self.peek().type == TokenType._const:
             return self.parseVariableDeclaration()
         elif self.peek().type == TokenType._print:
             return self.parsePrintStatement()
+        elif self.peek().type == TokenType.leftBrace:
+            return self.parseBlockStatement()
         else:
             expr = self.parseExpression()
             if self.semiafterexpr:
@@ -109,15 +124,55 @@ class Parser:
         return self.parseAssignment()
     
     def parseAssignment(self):
-        left = self.parseAdditive()
+        left = self.parseLogOr()
 
         if self.peek().type == TokenType.equals:
             self.eat()
-            right = self.parseAssignment()
+            right = self.parseLogOr()
             return AssignmentExpression(left, right, left.pos.line, left.pos.col)
         
         return left
 
+    def parseLogOr(self):
+        left = self.parseLogAnd()
+
+        while self.peek().type == TokenType.logor:
+            op = self.eat()
+            right = self.parseLogAnd()
+            left = BinaryExpression(left, op, right, left.pos.line, left.pos.col)
+
+        return left
+    
+    def parseLogAnd(self):
+        left = self.parseBitOr()
+
+        while self.peek().type == TokenType.logand:
+            op = self.eat()
+            right = self.parseBitOr()
+            left = BinaryExpression(left, op, right, left.pos.line, left.pos.col)
+
+        return left
+
+    def parseBitOr(self):
+        left = self.parseBitAnd()
+
+        while self.peek().type == TokenType.bitor:
+            op = self.eat()
+            right = self.parseBitAnd()
+            left = BinaryExpression(left, op, right, left.pos.line, left.pos.col)
+
+        return left    
+
+    def parseBitAnd(self):
+        left = self.parseAdditive()
+
+        while self.peek().type == TokenType.bitand:
+            op = self.eat()
+            right = self.parseAdditive()
+            left = BinaryExpression(left, op, right, left.pos.line, left.pos.col)
+
+        return left
+        
     def parseAdditive(self):
         left = self.parseMultiplicative()
 
