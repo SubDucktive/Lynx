@@ -7,7 +7,8 @@ from nodes import (
     AssignmentExpression,
     PrintStatement,
     NullLiteral,
-    BlockStatement
+    BlockStatement,
+    UnaryExpression
 )
 
 from error import LynxError
@@ -144,13 +145,23 @@ class Parser:
         return left
     
     def parseLogAnd(self):
-        left = self.parseBitOr()
+        left = self.parseEquality()
 
         while self.peek().type == TokenType.logand:
             op = self.eat()
-            right = self.parseBitOr()
+            right = self.parseEquality()
             left = BinaryExpression(left, op, right, left.pos.line, left.pos.col)
 
+        return left
+
+    def parseEquality(self):
+        left = self.parseBitOr()
+
+        while self.peek().type == TokenType.equalto:
+            op = self.eat()
+            right = self.parseBitOr()
+            left = BinaryExpression(left, op, right, left.pos.line, left.pos.col)
+        
         return left
 
     def parseBitOr(self):
@@ -184,14 +195,22 @@ class Parser:
         return left
 
     def parseMultiplicative(self):
-        left = self.parsePrimary()
+        left = self.parseUnary()
 
         while self.peek().type in [TokenType.mult, TokenType.divide]:
             op = self.eat()
-            right = self.parsePrimary()
+            right = self.parseUnary()
             left = BinaryExpression(left, op, right, left.pos.line, left.pos.col)
 
         return left
+
+    def parseUnary(self):
+        if self.peek().type in [TokenType.lognot, TokenType.minus]:
+            op = self.eat()
+            arg = self.parseUnary()
+            return UnaryExpression(op, arg, op.pos.line, op.pos.col)
+
+        return self.parsePrimary()
 
     def parsePrimary(self):
         tok = self.peek()

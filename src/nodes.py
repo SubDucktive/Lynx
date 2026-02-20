@@ -11,7 +11,7 @@ class ProgramStatement:
         return {
             "type": self.type,
             "statements": [stmt.dict() for stmt in self.statements],
-            "self.pos": self.pos.dict()
+            "pos": self.pos.dict()
         }
 
 class VariableDeclarationStatement:
@@ -106,6 +106,23 @@ class Identifier:
             "pos": self.pos.dict()
         }
 
+class UnaryExpression:
+    def __init__(self, op, arg, line, col):
+        self.type = "UnaryExpression"
+
+        self.op = op
+        self.arg = arg
+
+        self.pos = Position(line, col)
+    
+    def dict(self):
+        return {
+            "type": self.type,
+            "op": str(self.op),
+            "arg": self.arg.dict(),
+            "pos": self.pos.dict()
+        }
+
 class BinaryExpression:
     def __init__(self, left, op, right, line, col):
         self.type = "BinaryExpression"
@@ -120,7 +137,7 @@ class BinaryExpression:
         return {
             "type": self.type,
             "left": self.left.dict(),
-            "op": str(self.op),
+            "op": self.op.dict(),
             "right": self.right.dict(),
             "pos": self.pos.dict()
         }

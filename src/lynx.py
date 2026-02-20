@@ -25,10 +25,15 @@ def runFile(filename):
     try:
             tokens = Lexer(contents).tokenize()
 
+
+            #for tok in tokens:
+            #    print (tok)
+
             parser = Parser(tokens)
             parser.semiafterexpr = True
             ast = parser.parse()
 
+            # THIS IS BROKEN AS SHIT DONT USE IT
             #print(json.dumps(ast.dict(), indent=2))
 
 
@@ -53,6 +58,7 @@ def repl():
             parser.semiafterexpr = False
             ast = parser.parse()
 
+            # also broken
             #print(json.dumps(ast.dict(), indent=2))
 
             result = evaluate(ast, env)

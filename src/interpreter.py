@@ -55,6 +55,15 @@ def evaluate(node, env):
             result = lhs.value ^ rhs.value
 
         return runtimevalues.Number(result)
+    elif node.type == "UnaryExpression":
+        arg = evaluate(node.arg, env)
+
+        result = 0
+
+        if node.op.type == TokenType.minus:
+            result = arg.value * -1
+
+        return runtimevalues.Number(result)
     elif node.type == "Identifier":
         return env.lookup(node.name)
     elif node.type == "VariableDeclarationStatement":

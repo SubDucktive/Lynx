@@ -61,6 +61,11 @@ class Lexer:
             return Token(TokenType.divide, line, col)
         elif self.peek() == "=":
             self.eat()
+            
+            if not self.atEnd() and self.peek() == "=":
+                self.eat()
+                return Token(TokenType.equalto, line, col)
+
             return Token(TokenType.equals, line, col)
         elif self.peek() == ";":
             self.eat()

@@ -12,8 +12,13 @@ class TokenType:
     equals = "equals"
     semi = "semi"
 
+    equalto = "equalto"
+    notequal = "notequal"
+
     logand = "logand"
     logor  = "logor"
+
+    lognot = "lognot"
 
     bitand = "bitand"
     bitor  = "bitor"
@@ -41,3 +46,10 @@ class Token:
             return f"Token({self.type}, '{self.value}')"
         else:
             return f"Token({self.type})"
+
+    def dict(self):
+        return {
+            "type": self.type,
+            "value": self.value,
+            "pos": self.pos.dict()
+        }
