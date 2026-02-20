@@ -1,0 +1,6 @@
+print !true; // false
+print !false; // true
+print !5; // false
+print 3 - -3; // 6
+print 3--3; // 6
+print -(2 + 2); // -4

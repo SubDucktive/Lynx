@@ -11,6 +11,9 @@ class Variable:
 def createGlobalEnv():
     env = Enviornment()
 
+    env.defineBuiltinVar("true", runtimevalues.Boolean(True))
+    env.defineBuiltinVar("false", runtimevalues.Boolean(False))
+
     return env
 
 

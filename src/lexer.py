@@ -86,6 +86,9 @@ class Lexer:
                 return Token(TokenType.logor, line, col)
             
             return Token(TokenType.bitor, line, col)
+        elif self.peek() == "!":
+            self.eat()
+            return Token(TokenType.lognot, line, col)
         elif self.peek() == "{":
             self.eat()
             return Token(TokenType.leftBrace, line, col)

@@ -61,9 +61,10 @@ def evaluate(node, env):
         result = 0
 
         if node.op.type == TokenType.minus:
-            result = arg.value * -1
+            return runtimevalues.Number(arg.value * -1)
+        elif node.op.type == TokenType.lognot:
+            return runtimevalues.Boolean(not arg.value)
 
-        return runtimevalues.Number(result)
     elif node.type == "Identifier":
         return env.lookup(node.name)
     elif node.type == "VariableDeclarationStatement":
