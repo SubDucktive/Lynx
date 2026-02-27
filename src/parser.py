@@ -199,16 +199,24 @@ class Parser:
         return left
 
     def parseRelational(self):
-        left = self.parseAdditive()
+        left = self.parseEquality()
 
         while self.peek().type in [
-            TokenType.equalto,
-            TokenType.notequal,
             TokenType.lessthan,
             TokenType.lessequal,
             TokenType.greaterthan,
             TokenType.greaterequal
         ]:
+            op = self.eat()
+            right = self.parseEquality()
+            left = BinaryExpression(left, op, right, left.pos.line, left.pos.col)
+        
+        return left
+
+    def parseEquality(self):
+        left = self.parseAdditive()
+
+        while self.peek().type in [TokenType.equalto, TokenType.notequal]:
             op = self.eat()
             right = self.parseAdditive()
             left = BinaryExpression(left, op, right, left.pos.line, left.pos.col)

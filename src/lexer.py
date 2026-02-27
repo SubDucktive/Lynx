@@ -86,9 +86,6 @@ class Lexer:
         elif self.peek() == ";":
             self.eat()
             return Token(TokenType.semi, line, col)
-        elif self.peek() == ":":
-            self.eat()
-            return Token(TokenType.semi, line, col)
         elif self.peek() == "&":
             self.eat()
 
