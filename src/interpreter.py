@@ -53,6 +53,19 @@ def evaluate(node, env):
             result = lhs.value | rhs.value
         elif node.op.type == TokenType.bitxor:
             result = lhs.value ^ rhs.value
+        elif node.op.type == TokenType.equalto:
+            return runtimevalues.Boolean(lhs.value == rhs.value)
+        elif node.op.type == TokenType.notequal:
+            return runtimevalues.Boolean(lhs.value != rhs.value)
+        elif node.op.type == TokenType.lessthan:
+            return runtimevalues.Boolean(lhs.value < rhs.value)
+        elif node.op.type == TokenType.lessequal:
+            return runtimevalues.Boolean(lhs.value <= rhs.value)
+        elif node.op.type == TokenType.greaterthan:
+            return runtimevalues.Boolean(lhs.value > rhs.value)
+        elif node.op.type == TokenType.greaterequal:
+            return runtimevalues.Boolean(lhs.value >= rhs.value)
+
 
         return runtimevalues.Number(result)
     elif node.type == "UnaryExpression":
@@ -93,5 +106,10 @@ def evaluate(node, env):
         argument = evaluate(node.argument, env)
 
         print(stringify(argument))
+    elif node.type == "IfStatement":
+        if evaluate(node.test, env).value:
+            evaluate(node.consequent, env)
+        else:
+            evaluate(node.alternate, env)
     else:
         raise error.LynxError(f"Unknown ast node: {node.type}", node.pos.line, node.pos.col)

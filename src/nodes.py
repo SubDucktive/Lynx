@@ -64,6 +64,25 @@ class BlockStatement:
             "pos": self.pos.dict()
         }
 
+class IfStatement:
+    def __init__(self, test, consequent, alternate, line, col):
+        self.type = "IfStatement"
+
+        self.test = test
+        self.consequent = consequent
+        self.alternate = alternate
+
+        self.pos = Position(line, col)
+
+    def dict(self):
+        return {
+            "type": self.type,
+            "test": self.test.dict(),
+            "consequent": self.consequent.dict(),
+            "alternate": self.alternate.dict(),
+            "pos": self.pos.dict()
+        }
+
 class NumericLiteral:
     def __init__(self, value, line, col):
         self.type = "NumericLiteral"

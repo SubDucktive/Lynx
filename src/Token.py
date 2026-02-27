@@ -11,9 +11,16 @@ class TokenType:
     identifier = "identifier"
     equals = "equals"
     semi = "semi"
+    colon = "colon"
 
     equalto = "equalto"
     notequal = "notequal"
+
+    lessthan = "lessthan"
+    greaterthan = "greaterthan"
+
+    lessequal = "lessequal"
+    greaterequal = "greaterequal"
 
     logand = "logand"
     logor  = "logor"
@@ -24,13 +31,16 @@ class TokenType:
     bitor  = "bitor"
     bitxor = "bitxor"
 
-    leftBrace, rightBrace = "leftBrace", "rightBrace"
+    leftBrace = "leftBrace"
+    rightBrace = "rightBrace"
 
     # keywords
     _var = "var"
     _print = "print"
     _const = "const"
     _null = "null"
+    _if = "if"
+    _else = "else"
 
     EOF = "EOF"
 

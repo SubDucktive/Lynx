@@ -8,7 +8,8 @@ from nodes import (
     PrintStatement,
     NullLiteral,
     BlockStatement,
-    UnaryExpression
+    UnaryExpression,
+    IfStatement
 )
 
 from error import LynxError
@@ -103,6 +104,27 @@ class Parser:
         self.eat()
 
         return BlockStatement(body, tok.pos.line, tok.pos.col)
+
+    def parseIfStatement(self):
+        tok = self.eat()
+
+        # ion even know if i should expect parenthesis here or not
+
+        self.expect(TokenType.leftParen, "Expected opening parenthesis in if statement.")
+
+        test = self.parseExpression()
+
+        self.expect(TokenType.rightParen, "Expected closing parenthesis in if statement.")
+
+        consequent = self.parseStatement()
+
+        if self.peek().type == TokenType._else:
+            self.eat()
+            alternate = self.parseStatement()
+        else:
+            alternate = None
+
+        return IfStatement(test, consequent, alternate, tok.pos.line, tok.pos.col)
     
     def parseStatement(self):
         if self.peek().type == TokenType._var or self.peek().type == TokenType._const:
@@ -111,6 +133,8 @@ class Parser:
             return self.parsePrintStatement()
         elif self.peek().type == TokenType.leftBrace:
             return self.parseBlockStatement()
+        elif self.peek().type == TokenType._if:
+            return self.parseIfStatement()
         else:
             expr = self.parseExpression()
             if self.semiafterexpr:
@@ -145,23 +169,13 @@ class Parser:
         return left
     
     def parseLogAnd(self):
-        left = self.parseEquality()
+        left = self.parseBitOr()
 
         while self.peek().type == TokenType.logand:
             op = self.eat()
-            right = self.parseEquality()
-            left = BinaryExpression(left, op, right, left.pos.line, left.pos.col)
-
-        return left
-
-    def parseEquality(self):
-        left = self.parseBitOr()
-
-        while self.peek().type == TokenType.equalto:
-            op = self.eat()
             right = self.parseBitOr()
             left = BinaryExpression(left, op, right, left.pos.line, left.pos.col)
-        
+
         return left
 
     def parseBitOr(self):
@@ -175,13 +189,30 @@ class Parser:
         return left    
 
     def parseBitAnd(self):
-        left = self.parseAdditive()
+        left = self.parseRelational()
 
         while self.peek().type == TokenType.bitand:
             op = self.eat()
-            right = self.parseAdditive()
+            right = self.parseRelational()
             left = BinaryExpression(left, op, right, left.pos.line, left.pos.col)
 
+        return left
+
+    def parseRelational(self):
+        left = self.parseAdditive()
+
+        while self.peek().type in [
+            TokenType.equalto,
+            TokenType.notequal,
+            TokenType.lessthan,
+            TokenType.lessequal,
+            TokenType.greaterthan,
+            TokenType.greaterequal
+        ]:
+            op = self.eat()
+            right = self.parseAdditive()
+            left = BinaryExpression(left, op, right, left.pos.line, left.pos.col)
+        
         return left
         
     def parseAdditive(self):

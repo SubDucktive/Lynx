@@ -67,7 +67,26 @@ class Lexer:
                 return Token(TokenType.equalto, line, col)
 
             return Token(TokenType.equals, line, col)
+        elif self.peek() == ">":
+            self.eat()
+
+            if not self.atEnd() and self.peek() == "=":
+                self.eat()
+                return Token(TokenType.greaterequal, line, col)
+
+            return Token(TokenType.greaterthan, line, col)
+        elif self.peek() == "<":
+            self.eat()
+
+            if not self.atEnd() and self.peek() == "=":
+                self.eat()
+                return Token(TokenType.lessequal, line, col)
+            
+            return Token(TokenType.lessthan, line, col)
         elif self.peek() == ";":
+            self.eat()
+            return Token(TokenType.semi, line, col)
+        elif self.peek() == ":":
             self.eat()
             return Token(TokenType.semi, line, col)
         elif self.peek() == "&":
@@ -88,6 +107,11 @@ class Lexer:
             return Token(TokenType.bitor, line, col)
         elif self.peek() == "!":
             self.eat()
+
+            if not self.atEnd() and self.peek() == "=":
+                self.eat()
+                return Token(TokenType.notequal, line, col)
+            
             return Token(TokenType.lognot, line, col)
         elif self.peek() == "{":
             self.eat()
@@ -115,6 +139,10 @@ class Lexer:
                 return Token(TokenType._const, line, col, symbol)
             elif symbol == "null":
                 return Token(TokenType._null, line, col, symbol)
+            elif symbol == "if":
+                return Token(TokenType._if, line, col, symbol)
+            elif symbol == "else":
+                return Token(TokenType._else, line, col, symbol)
 
             return Token(TokenType.identifier, line, col, symbol)
         elif self.peek() in "\t ":
