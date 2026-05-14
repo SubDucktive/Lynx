@@ -34,6 +34,8 @@ class TokenType:
     leftBrace = "leftBrace"
     rightBrace = "rightBrace"
 
+    string = "string"
+
     # keywords
     _var = "var"
     _print = "print"

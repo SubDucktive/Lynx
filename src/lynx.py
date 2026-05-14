@@ -36,6 +36,11 @@ def runFile(filename):
             # THIS IS BROKEN AS SHIT DONT USE IT
             #print(json.dumps(ast.dict(), indent=2))
 
+            for stmt in ast.statements:
+                if stmt.type == "IfStatement":
+                    if stmt.alternate:
+                        print("Lynx: ", stmt.pos.line)
+
 
             evaluate(ast, env)
 
@@ -53,6 +58,9 @@ def repl():
 
         try:
             tokens = Lexer(userin).tokenize()
+
+            #for tok in tokens:
+            #    print(tok)
 
             parser = Parser(tokens)
             parser.semiafterexpr = False

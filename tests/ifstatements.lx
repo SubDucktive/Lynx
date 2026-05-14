@@ -1,0 +1,148 @@
+// ======================
+// BASIC IF STATEMENTS
+// ======================
+
+var a = 5;
+
+if (a > 3) {
+    print 1; // 1
+}
+
+if (a < 3) {
+    print 2; // (should not print)
+}
+
+if (a == 5) {
+    print 3; // 3
+}
+
+// ======================
+// ELSE HANDLING
+// ======================
+
+if (a < 3) {
+    print 4;
+} else {
+    print 5; // 5
+}
+
+if (a == 10) {
+    print 6;
+} else {
+    print 7; // 7
+}
+
+// ======================
+// RELATIONAL OPERATORS
+// ======================
+
+print 3 > 2;   // true
+print 3 < 2;   // false
+print 3 >= 3;  // true
+print 2 <= 1;  // false
+print 4 == 4;  // true
+print 4 != 4;  // false
+
+// ======================
+// LOGICAL OPERATORS
+// ======================
+
+print true && true;    // true
+print true && false;   // false
+print false && false;  // false
+
+print true || false;   // true
+print false || false;  // false
+
+// ======================
+// PRECEDENCE TESTS
+// ======================
+
+print true || false && false; // should be true (&& first)
+
+print (true || false) && false; // should be false
+
+print !true && false; // false
+print !(true && false); // true
+
+// ======================
+// TRUTHY / FALSY BEHAVIOR
+// ======================
+
+if (1) {
+    print 8; // 8 (if numbers are truthy)
+}
+
+if (0) {
+    print 9; // (depends on design, usually false)
+}
+
+if (-1) {
+    print 10; // 10 (if non-zero is truthy)
+}
+
+// ======================
+// BLOCK SCOPE WITH IF
+// ======================
+
+var x = 1;
+
+if (true) {
+    var x = 2;
+    print x; // 2
+
+    var y = 3;
+    print y; // 3
+}
+
+print x; // 1 (or 2 if no shadowing rules)
+//print y; // error
+
+// ======================
+// NESTED IF
+// ======================
+
+var b = 10;
+
+if (b > 5) {
+    if (b < 20) {
+        print 11; // 11
+    }
+}
+
+// ======================
+// COMPLEX EXPRESSIONS
+// ======================
+
+var c = 3;
+
+if (c * 2 == 6 && c + 1 == 4) {
+    print 12; // 12
+}
+
+if (c == 3 && (c > 2 || c < 1)) {
+    print 13; // 13
+}
+
+// ======================
+// NEGATION EDGE CASES
+// ======================
+
+print !0;    // true or false depending on truth rules
+print !1;    // false
+print !5;    // false
+
+print !!true; // true
+print !!0;    // false
+
+// ======================
+// ASSIGNMENT IN CONDITIONS (if supported)
+// ======================
+
+var d = 0;
+
+if (d = 5) {
+    print 14; // only valid if assignment returns value
+}
+
+print d; // 5

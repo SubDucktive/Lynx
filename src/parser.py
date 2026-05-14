@@ -2,6 +2,7 @@ from nodes import (
     ProgramStatement,
     BinaryExpression,
     NumericLiteral,
+    StringLiteral,
     Identifier,
     VariableDeclarationStatement,
     AssignmentExpression,
@@ -256,6 +257,9 @@ class Parser:
         if tok.type == TokenType.number:
             self.eat()
             return NumericLiteral(tok.value, tok.pos.line, tok.pos.col)
+        if tok.type == TokenType.string:
+            self.eat()
+            return StringLiteral(tok.value, tok.pos.line, tok.pos.col)
         elif tok.type == TokenType._null:
             self.eat()
             return NullLiteral(tok.pos.line, tok.pos.col)

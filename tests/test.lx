@@ -1,0 +1,7 @@
+var x = 1;
+if (true) {
+    var x = 5;
+    print x; // prints 5
+    x = 2;
+}
+print x; // prints 1

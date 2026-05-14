@@ -98,6 +98,14 @@ class NumericLiteral:
             "pos": self.pos.dict()
         }
     
+class StringLiteral:
+    def __init__(self, value, line, col):
+        self.type = "StringLiteral"
+
+        self.value = value
+
+        self.pos = Position(line, col)
+    
 class NullLiteral:
     def __init__(self, line, col):
         self.type = "NullLiteral"

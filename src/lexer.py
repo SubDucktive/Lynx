@@ -142,6 +142,46 @@ class Lexer:
                 return Token(TokenType._else, line, col, symbol)
 
             return Token(TokenType.identifier, line, col, symbol)
+        elif self.peek() == '"':
+            self.eat()
+            string = ""
+
+            while not self.atEnd() and self.peek() != '"':
+                char = self.eat()
+
+                if char == "\\":
+                    if self.atEnd():
+                        raise error.LynxError(f"Unexpected end of output.", self.line, self.col)
+                    seq = self.eat()
+                    if seq == "n":
+                        string += "\n"
+                    elif seq == "t":
+                        string += "\t"
+                    elif seq == "\\":
+                        string += "\\"
+                    elif seq == '"':
+                        string += '"'
+                    elif seq == "x":
+                        hex_str = ""
+                        for _ in range(2):
+                            if self.atEnd():
+                                raise error.LynxError("Unterminated \\x escape sequence", self.line, self.col)
+                            if self.peek() not in "0123456789abcdefABCDEF":
+                                raise error.LynxError(f"Invalid hex digit: '{self.peek()}'", self.line, self.col)
+                            hex_str += self.eat()
+                        
+                        string += chr(int(hex_str, 16))
+                    else:
+                        raise error.LynxError(f"Invalid escape sequence '\\{seq}'.", self.line, self.col)
+                else:
+                    string += char
+            
+            if self.atEnd():
+                raise error.LynxError("Unterminated string literal.", self.line, self.col)
+            self.eat()
+
+            return Token(TokenType.string, line, col, string)
+
         elif self.peek() in "\t ":
             self.eat()
         elif self.peek() == "\n":
